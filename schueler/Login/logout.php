@@ -39,7 +39,7 @@
 				{
 					echo "<tr>";
 					echo "<td bgcolor=76fa7e>". $zeile['ID'] . "</td>";
-					echo "<td bgcolor=76fa7e>". date('d.m.y H:i:s', strtotime($zeile['Datum'])) . "</td>";
+					echo "<td bgcolor=76fa7e nowrap>". date('d.m.y H:i:s', strtotime($zeile['Datum'])) . "</td>";
 					echo "<td bgcolor=76fa7e>". $zeile['Name'] . "</td>";
 					echo "<td bgcolor=76fa7e>". $zeile['Vorname'] . "</td>";
 					echo "<td bgcolor=76fa7e>". $zeile['Menue'] . "</td>";

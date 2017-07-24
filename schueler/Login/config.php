@@ -2,7 +2,6 @@
 	$website_title   = "Essensplan MySQL Datenbank";
 	$website_charest = "UTF-8";
 	$website_pages   = "pages";
-	static $tage;
 	
 	/*
 	Die Konstanten auslagern in eigene Datei

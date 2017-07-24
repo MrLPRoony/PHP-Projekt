@@ -8,7 +8,6 @@
 	<body bgcolor=#ffffe0>
 		<?php
 			require_once("config.php");
-			echo "$tage";
 			//Verbindung zur Datenbank.
 			require_once("dbconnect.php");
 			
@@ -88,7 +87,7 @@
 					{
 						echo "<h2>Die Menüs!</h2>";
 						echo "<table>";
-						echo "<tr><td>Menü 1: </td><td>$menues[2]</td></tr>";
+						echo "<tr><td>Menü 1: </td><td>$menues[1]</td></tr>";
 						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
 						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
 						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
