@@ -27,7 +27,7 @@
 								<tr><td>ID: </td><td><input type="text" name="id" /></td></tr>
 								<tr><td>Familienname: </td><td><input type="text" name="name" /></td></tr>
 								<tr><td>Vorname: </td><td><input type="text" name="vorname" /></td></tr>
-								<tr><td>Menue: </td><td><select name="menue" value="$row[3]" size="1"><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>
+								<tr><td>Menue: </td><td><select name="menue" value="$row[3]" size="1"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>
 								<tr><td>Anmeldename: </td><td><input type="text" name="benutzer" /></td></tr>
 								<tr><td>Standart Passwort: </td><td><input type="text" name="pw" /></td></tr>
 								<tr><td colspan="2"><input type="submit" value="Eintragen" /></td></tr>
@@ -48,9 +48,11 @@
 						$eingabe = $_POST['name'];
 						$eingaben = $_POST['vorname'];
 						$id = $_POST['id'];
+						$pwe = $_POST['pw'];
+						$anm = $_POST['benutzer'];
 		
 		
-						if ($eingabe == "" || $eingaben == "" || $id == "")
+						if ($eingabe == "" || $eingaben == "" || $id == "" || $pwe == "" || $anm == "")
 						{
 			?>
 							<form action="hinzufügen.php">
@@ -62,31 +64,56 @@
 						{
 							//Verbindung zur Datenbank.
 							require_once("dbconnect.php");
-							
-							$name = $_POST['name'];
-							$vorname = $_POST['vorname'];
-							$menue = $_POST['menue'];
-							$id = $_POST['id'];
-							$pw = hash('sha1',$_POST["pw"]);
-							
-							//Für den Benutzer
-							$user = strtolower($_POST['benutzer']);
-							$anfrage = "INSERT INTO `Anmeldung` (`ID`, `Benutzername`, `Vorname`, `Nachname`, `Passwort`) VALUES (?, ?, ?, ?, ?)";
-							$eintragen = $mysqli->prepare( $anfrage );
-							$eintragen->bind_param( 'sssss', $id, $user, $vorname, $name, $pw);
-							$eintragen->execute();
-							
-							$sql = 'INSERT INTO `Tabelle` (`ID`, `Name`, `Vorname`, `Menue`, `anmeldung` ) VALUES (?, ?, ?, ?, ?)';
-							$eintrag = $mysqli->prepare( $sql );
-							$eintrag->bind_param( 'sssss', $id, $name, $vorname, $menue, $user);
-							$eintrag->execute();
-							
-							// Pruefen ob der Eintrag efolgreich war
-							if ($eintrag->affected_rows > 0)
+							$überprüfen = mysqli_query($mysqli, "SELECT * FROM Tabelle WHERE ID='$id'");
+							$control=0;
+							while($row = $überprüfen->fetch_object())
 							{
+								$control++;
+							}
+							if($control > 0)
+							{
+								echo "<strong>Die von Ihnen eingegeben ID ist schon vergeben!</strong>";
+								echo "<meta http-equiv=\"refresh\" content=\"2; URL=hinzufügen.php\" />";
+							} else
+							{
+								$überprüfen2 = mysqli_query($mysqli, "SELECT * FROM Anmeldung WHERE Benutzername='$anm'");
+								$control2=0;
+								while($row = $überprüfen2->fetch_object())
+								{
+									$control2++;
+								}
+								if ($control2 > 0)
+								{
+									echo "<strong>Der von Ihnen eingegeben Anmeldename ist schon vergeben!</strong>";
+									echo "<meta http-equiv=\"refresh\" content=\"2; URL=hinzufügen.php\" />";
+								} else
+								{
+									$name = $_POST['name'];
+									$vorname = $_POST['vorname'];
+									$menue = $_POST['menue'];
+									$id = $_POST['id'];
+									$pw = hash('sha1',$_POST["pw"]);
+							
+									//Für den Benutzer
+									$user = strtolower($_POST['benutzer']);
+									$anfrage = "INSERT INTO `Anmeldung` (`ID`, `Benutzername`, `Vorname`, `Nachname`, `Passwort`) VALUES (?, ?, ?, ?, ?)";
+									$eintragen = $mysqli->prepare( $anfrage );
+									$eintragen->bind_param( 'sssss', $id, $user, $vorname, $name, $pw);
+									$eintragen->execute();
+							
+									$sql = 'INSERT INTO `Tabelle` (`ID`, `Name`, `Vorname`, `Menue`, `anmeldung` ) VALUES (?, ?, ?, ?, ?)';
+									$eintrag = $mysqli->prepare( $sql );
+									$eintrag->bind_param( 'sssss', $id, $name, $vorname, $menue, $user);
+									$eintrag->execute();
+							
+									// Pruefen ob der Eintrag efolgreich war
+									if ($eintrag->affected_rows > 0)
+									{
 			
-							//$eintragen= mysqli_query($mysqli, $eintrag);
-								echo "Ihre Angaben wurden gespeichert... Sie werden in wenigen Sekunden<br />weitergeleitet. <meta http-equiv=\"refresh\" content=\"3; URL=index.php\" />";
+										//$eintragen= mysqli_query($mysqli, $eintrag);
+										echo "Ihre Angaben wurden gespeichert... Sie werden in wenigen Sekunden<br />weitergeleitet. <meta http-equiv=\"refresh\" content=\"3; URL=index.php\" />";
+									}
+								}
 							}
 						}
 					} else

@@ -36,6 +36,18 @@
 					echo "<tr><td><br>Menü: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>";
 					echo "<tr><td><br><br><input type=\"submit\" name=\"bearbeitet\" value=\"Ändern\"></td></tr>";
 					echo "</table></form>\n";
+					
+					$abfrage = mysqli_query($mysqli, "SELECT * FROM Menues");
+					if($menues = mysqli_fetch_row($abfrage))
+					{
+						echo "<h2>Die Menüs!</h2>";
+						echo "<table>";
+						echo "<tr><td>Menü 1: </td><td>$menues[1]</td></tr>";
+						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
+						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
+						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
+						echo "</table>";
+					}
 				}
 				?>
 				<form action="hinzufügen.php">
@@ -70,6 +82,18 @@
 					echo "<tr><td><br>Menü: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>";
 					echo "<tr><td><br><br><input type=\"submit\" name=\"bearbeitet\" value=\"Ändern\"></td></tr>";
 					echo "</table></form>\n";
+					
+					$abfrage = mysqli_query($mysqli, "SELECT * FROM Menues");
+					if($menues = mysqli_fetch_row($abfrage))
+					{
+						echo "<h2>Die Menüs!</h2>";
+						echo "<table>";
+						echo "<tr><td>Menü 1: </td><td>$menues[2]</td></tr>";
+						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
+						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
+						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
+						echo "</table>";
+					}
 					} else 
 					{
 						$antwort = mysqli_query($mysqli, "SELECT Vorname, Nachname FROM Anmeldung WHERE Benutzername='$_SESSION[user]'");

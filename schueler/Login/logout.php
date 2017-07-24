@@ -27,13 +27,14 @@
 
 				//Ausgabe mittels einer while Schleife und das in einer Art Tabelle ausgeben.  
 		
-				echo '<table cellpadding="0.5" border="2" width="60%">';
-				echo "<td bgcolor=5dc264><u>". "ID" . "</u></td>";
-				echo "<td bgcolor=5dc264><u>". "Erstellt" . "</u></td>";
-				echo "<td bgcolor=5dc264><u>". "Name" . "</u></td>";
-				echo "<td bgcolor=5dc264><u>". "Vorname" . "</u></td>";
-				echo "<td bgcolor=5dc264><u>". "Menue" . "</u></td>";
-				echo "<td bgcolor=5dc264><u>". "Bearbeiten" . "</u></td>";
+				echo '<table border="2" width="50%" bordercolor=#000000 bgcolor=#CCFFCC bordercolordark=#000000 bordercolorlight=#000000>';
+				echo "<caption align=bottom >Alle eingetragenen Schüler</caption>";
+				echo "<th bgcolor=5dc264><u>". "ID" . "</u></th>";
+				echo "<th bgcolor=5dc264><u>". "Bearbeitet" . "</u></th>";
+				echo "<th bgcolor=5dc264><u>". "Name" . "</u></th>";
+				echo "<th bgcolor=5dc264><u>". "Vorname" . "</u></th>";
+				echo "<th bgcolor=5dc264><u>". "Menü" . "</u></th>";
+				echo "<th bgcolor=5dc264 height =20><u>". "Bearbeiten" . "</u></th>";
 				while ($zeile = mysqli_fetch_array( $db_erg ))
 				{
 					echo "<tr>";
@@ -42,7 +43,7 @@
 					echo "<td bgcolor=76fa7e>". $zeile['Name'] . "</td>";
 					echo "<td bgcolor=76fa7e>". $zeile['Vorname'] . "</td>";
 					echo "<td bgcolor=76fa7e>". $zeile['Menue'] . "</td>";
-					echo "<td bgcolor=00e600 colspan=\"1\"> <a href=\"bearbeiten.php?id=$zeile[0]\"><p><img src='2.gif' /></a> <a href=\"delete.php?id=$zeile[0]\"><img src='x.png' /></a></p>";
+					echo "<td bgcolor=00e600 align=\"left\" align=\"center\" ><a href=\"bearbeiten.php?id=$zeile[0]\"><p><img src='2.gif' /></a> <a href=\"delete.php?id=$zeile[0]\"><img src='x.png' /></a></p>";
 					echo "</tr>";
 				}
 				echo "</table>";

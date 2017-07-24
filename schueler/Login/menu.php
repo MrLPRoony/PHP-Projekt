@@ -5,8 +5,8 @@
 ?>
 <html>
 	<head>	
-		<meta charset="UTF-8" />
 		<title>Menues</title>
+		<meta charset="UTF-8" />
 	</head>
 	<body bgcolor=#ffffe0>
 	<center><h1>Die Menue Anzahl</h1></center><br />
