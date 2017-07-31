@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ger">
 	<head>
 		<title>Neu angemeldet</title>
 		<meta charset="UTF-8" />
@@ -44,6 +44,8 @@
 							//Hier geht es weiter wenn man das alte Passwort richtig eingegeben hat.
 							$pwn = hash('sha1',$_POST["pwn"]);
 							$pwn2 = hash('sha1',$_POST["pwn2"]);
+							if($pwn <= 32 && $pwn >= 6)
+							{
 							if($pwn == $pwn2)
 							{
 								if ($pwn == hash('sha1',$_POST["pwa"]))
@@ -62,10 +64,10 @@
 		<?php
 								} else
 								{
-								//Hier geht es wieter wenn auch das neue Passwort mit der Wiederholung übereinstimmt.
-								//SQL: Auffordern den Eintrag zu ändern
-								$update = mysqli_query($mysqli, "UPDATE Anmeldung SET Passwort = '$pwn', Neu = '1' WHERE Benutzername = '$_POST[user]'");
-								echo "<br /><strong>Sie haben ihr Passwort erfolgreich erneuert.</strong><meta http-equiv=\"refresh\" content=\"3; URL=index.php\" />";
+									//Hier geht es wieter wenn auch das neue Passwort mit der Wiederholung übereinstimmt.
+									//SQL: Auffordern den Eintrag zu ändern
+									$update = mysqli_query($mysqli, "UPDATE Anmeldung SET Passwort = '$pwn', Neu = '1' WHERE Benutzername = '$_POST[user]'");
+									echo "<br /><strong>Sie haben ihr Passwort erfolgreich erneuert.</strong><meta http-equiv=\"refresh\" content=\"3; URL=index.php\" />";
 								}
 							}
 							else
@@ -82,6 +84,21 @@
 									</table>
 								</form>
 		<?php
+							}
+							} else
+							{
+								echo "<strong>Ihr neues Passwort muss mind. 6 Zeichen beinhalten und max. 32!</strong>";
+		?>
+								<form method="POST" action="neu.php?page=2">
+									<table>
+										<?php echo "<tr><td>Name: </td><td><input type=\"text\" readonly name=\"user\" value=\"$row[1]\" /></td></tr>"; ?>
+										<tr><td>Altes Passwort: </td><td><input type="password" name="pwa" /></td></tr>
+										<tr><td>Neues Passwort: </td><td><input type="password" name="pwn" /></td></tr>
+										<tr><td>Neues Passwort wiederholen: </td><td><input type="password" name="pwn2" /></td></tr>
+										<tr><td colspan="2"><input type="submit" value="Ändern" /></td></tr>
+									</table>
+								</form>
+		<?php						
 							}
 						}
 						else 

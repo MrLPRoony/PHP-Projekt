@@ -16,10 +16,26 @@
 			$admin = $_SESSION["user"];
 			if($admin == "administrator") 
 			{
+				if(!isset($_GET["page"]))
+				{
+					@$save = $_GET[id];
+				?>
+				<h2><strong>Wählen Sie aus bei welcher Woche Sie das Menü ändern wollen.</strong></h2>
+					<form action="bearbeiten.php?page=2" method="POST" >
+					<select name="woche" size="1"><option>33.Kalenderwoche</option><option>34.Kalenderwoche</option><option>35.Kalenderwoche</option><option>36.Kalenderwoche</option></select>
+					<?php
+					echo "<input type=\"submit\" name=\"auswahl\" value=\"Auswählen\">";
+					echo "<input type=\"hidden\" name=\"id\" value=\"$save\">";
+					?>
+					</form>
+				<?php
+				}
+				if (@$_GET["page"] == 2 && isset($_GET["page"]))
+				{
 				//Hier für den Administator.
 				echo "<p>Willkommen zur Bearbeitung. Sie können hier weitere Nutzer hinzufügen oder beim ausgewählten Nutzer das Menü ändern, Administrator!</p>";
 				//SQL-Anfrage: Alle Spalten die unter der ID gespeichert sind auswählen.
-				$db="SELECT * FROM Tabelle WHERE ID=$_GET[id]";
+				$db="SELECT * FROM Tabelle WHERE ID=$_POST[id]";
 				//Die Anfrage ausführen.
 				$ergebnis = mysqli_query($mysqli,$db);
 				//Zum bearbeiten ausgebene und nur das menüe
@@ -32,27 +48,21 @@
 					echo "<tr><td><br>ID: </td><td><input type=\"text\" name=\"id\" readonly value=\"$row[0]\"></td></tr>";
 					echo "<tr><td><br>Name: </td><td><input type=\"text\" name=\"name\" readonly value=\"$row[1]\"></td></tr>";
 					echo "<tr><td><br>Vorname: </td><td><input type=\"text\" name=\"vorname\" readonly value=\"$row[2]\"></td></tr>";
-					echo "<tr><td><br>Menü: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>";
+					echo "<tr><td colspan=\"1\"><h3><u>Auswahl</u></h3></td></tr>";
+					echo "<tr><td><br>Menü Montag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Dienstag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Mittwoch: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Donnerstag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Freitag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
 					echo "<tr><td><br><br><input type=\"submit\" name=\"bearbeitet\" value=\"Ändern\"></td></tr>";
 					echo "</table></form>\n";
-					
-					$abfrage = mysqli_query($mysqli, "SELECT * FROM Menues");
-					if($menues = mysqli_fetch_row($abfrage))
-					{
-						echo "<h2>Die Menüs!</h2>";
-						echo "<table>";
-						echo "<tr><td>Menü 1: </td><td>$menues[1]</td></tr>";
-						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
-						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
-						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
-						echo "</table>";
-					}
 				}
 				?>
 				<form action="hinzufügen.php">
 					<br /><input type="submit" value="Neu hinzufügen" />
 				</form>
 				<?php
+				}
 			} else 
 			{
 				$antwort = mysqli_query($mysqli, "SELECT Vorname, Nachname FROM Anmeldung WHERE Benutzername='$_SESSION[user]'");
@@ -78,21 +88,14 @@
 					echo "<tr><td><br>ID: </td><td><input type=\"text\" name=\"id\" readonly value=\"$row[0]\"></td></tr>";
 					echo "<tr><td><br>Name: </td><td><input type=\"text\" name=\"name\" readonly value=\"$row[1]\"></td></tr>";
 					echo "<tr><td><br>Vorname: </td><td><input type=\"text\" name=\"vorname\" readonly value=\"$row[2]\"></td></tr>";
-					echo "<tr><td><br>Menü: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>";
+					echo "<tr><td colspan=\"1\"><h3><u>Auswahl</u></h3></td></tr>";
+					echo "<tr><td><br>Menü Montag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Dienstag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Mittwoch: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Donnerstag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
+					echo "<tr><td><br>Menü Freitag: </td><td><select name=\"menue\" value=\"$row[3]\" size=\"1\"><option>1</option><option>2</option><option>3</option></select></td></tr>";
 					echo "<tr><td><br><br><input type=\"submit\" name=\"bearbeitet\" value=\"Ändern\"></td></tr>";
 					echo "</table></form>\n";
-					
-					$abfrage = mysqli_query($mysqli, "SELECT * FROM Menues");
-					if($menues = mysqli_fetch_row($abfrage))
-					{
-						echo "<h2>Die Menüs!</h2>";
-						echo "<table>";
-						echo "<tr><td>Menü 1: </td><td>$menues[1]</td></tr>";
-						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
-						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
-						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
-						echo "</table>";
-					}
 					} else 
 					{
 						$antwort = mysqli_query($mysqli, "SELECT Vorname, Nachname FROM Anmeldung WHERE Benutzername='$_SESSION[user]'");
@@ -108,7 +111,7 @@
 			}
 			} else 
 			{
-				echo "<p>Melden Sie sich zuerst an um diesen Beitrag zu bearbeiten... <a href=\"login.php\">zur Anmeldung</a><br />oder gehen Sie <a href=\"index.php\">zurück zur Tabelle</a>";
+				echo "<p>Melden Sie sich zuerst an um diesen Beitrag zu bearbeiten...<br /><strong><a href=\"index.php\">Zurück zur Tabelle</a> oder <a href=\"login.php\">zur Anmledung</a>.</strong>";
 			}
 		?>
 	</body>

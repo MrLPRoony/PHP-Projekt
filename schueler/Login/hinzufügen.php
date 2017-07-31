@@ -1,6 +1,9 @@
+<!DOCTYPE html>
 <?php
 	//Dies ist dazu da um den Cookie zu speichern für's Anmeldeformula.
 	session_start();
+	//Verbindung zur Datenbank.
+	require_once("dbconnect.php");
 	if(isset($_SESSION["user"])) 
 	{
 		$prüfen = $_SESSION["user"];
@@ -18,29 +21,26 @@
 					if(!isset($_GET["page"]))
 					{
 				?>
-					<center>
-						<p>Füllen Sie bitte alle Spalten aus und drücken Sie<br />dann erst auf "Eintragen" um Ihren Eintrag zu bestätigen.
-						<br />Man kann nur zwischen Menue 1, 2, 3 und 4 wählen.</p>
-						<br /><br /><br />
-						<form action="hinzufügen.php?page=2" method="post">
-							<table>
-								<tr><td>ID: </td><td><input type="text" name="id" /></td></tr>
-								<tr><td>Familienname: </td><td><input type="text" name="name" /></td></tr>
-								<tr><td>Vorname: </td><td><input type="text" name="vorname" /></td></tr>
-								<tr><td>Menue: </td><td><select name="menue" value="$row[3]" size="1"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>
-								<tr><td>Anmeldename: </td><td><input type="text" name="benutzer" /></td></tr>
-								<tr><td>Standart Passwort: </td><td><input type="text" name="pw" /></td></tr>
-								<tr><td colspan="2"><input type="submit" value="Eintragen" /></td></tr>
-							</table>
-						</form>
-						<p>Sie können sich auch die <a href="hinzufügen.php?page=menues">Menues angucken</a>.<br /><br /></p>
-					</center>
-					<a href="logout.php">Ausloggen </a>
-				</body>
-			</html>
-
+						<center>
+							<p>Füllen Sie bitte alle Spalten aus und drücken Sie<br />dann erst auf "Eintragen" um Ihren Eintrag zu bestätigen.
+							<br />Man kann nur zwischen Menü 1, 2, 3 und 4 wählen.</p>
+							<br /><br /><br />
+							<form action="hinzufügen.php?page=2" method="post">
+								<table>
+									<tr><td>ID: </td><td><input type="text" name="id" /></td></tr>
+									<tr><td>Familienname: </td><td><input type="text" name="name" /></td></tr>
+									<tr><td>Vorname: </td><td><input type="text" name="vorname" /></td></tr>
+									<tr><td>Menue: </td><td><select name="menue" value="$row[3]" size="1"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></td></tr>
+									<tr><td>Anmeldename: </td><td><input type="text" name="benutzer" /></td></tr>
+									<tr><td>Standart Passwort: </td><td><input type="text" name="pw" /></td></tr>
+									<tr><td colspan="2"><input type="submit" value="Eintragen" /></td></tr>
+								</table>
+							</form>
+							<p>Sie können sich auch die <a href="hinzufügen.php?page=menues">Menüs angucken</a>.<br /><br /></p>
+						</center>
+						<a href="logout.php">Ausloggen </a>
 			<?php
-					} elseif (isset($_GET["page"]) == 2) 
+					} elseif ($_GET["page"] == 2) 
 					{
 						/*Die Eingaben von der ersten Seite werden hier gespeichert
 						und überprüft ob etwas eingegeben wurde.
@@ -62,8 +62,6 @@
 							die ("Sie haben bei einem oder mehreren Feldern keine Eingabe getätigt");
 						} else
 						{
-							//Verbindung zur Datenbank.
-							require_once("dbconnect.php");
 							$überprüfen = mysqli_query($mysqli, "SELECT * FROM Tabelle WHERE ID='$id'");
 							$control=0;
 							while($row = $überprüfen->fetch_object())
@@ -89,6 +87,7 @@
 								} else
 								{
 									$name = $_POST['name'];
+									$such = strtolower($name);
 									$vorname = $_POST['vorname'];
 									$menue = $_POST['menue'];
 									$id = $_POST['id'];
@@ -101,9 +100,9 @@
 									$eintragen->bind_param( 'sssss', $id, $user, $vorname, $name, $pw);
 									$eintragen->execute();
 							
-									$sql = 'INSERT INTO `Tabelle` (`ID`, `Name`, `Vorname`, `Menue`, `anmeldung` ) VALUES (?, ?, ?, ?, ?)';
+									$sql = 'INSERT INTO `Tabelle` (`ID`, `Name`, `Vorname`, `Menue`, `anmeldung`, `suchen` ) VALUES (?, ?, ?, ?, ?, ?)';
 									$eintrag = $mysqli->prepare( $sql );
-									$eintrag->bind_param( 'sssss', $id, $name, $vorname, $menue, $user);
+									$eintrag->bind_param( 'ssssss', $id, $name, $vorname, $menue, $user, $such);
 									$eintrag->execute();
 							
 									// Pruefen ob der Eintrag efolgreich war
@@ -118,14 +117,18 @@
 						}
 					} else
 					{
+					$query = mysqli_query($mysqli, "SELECT * FROM Menues");
+					if($menues = mysqli_fetch_row($query))
+					{
+						echo "<h2>Die Menüs!</h2>";
+						echo "<form action=\"hinzufügen.php\" method=\"post\">";
+						echo "<table>";
+						echo "<tr><td>Menü 1: </td><td>$menues[1]</td></tr>";
+						echo "<tr><td>Menü 2: </td><td>$menues[2]</td></tr>";
+						echo "<tr><td>Menü 3: </td><td>$menues[3]</td></tr>";
+						echo "<tr><td>Menü 4: </td><td>$menues[4]</td></tr>";
+					}
 			?>
-		<Center><h2>Menues von 1 bis 4</h2></center>
-		<form action="hinzufügen.php" method="post">
-			<table>
-				<tr><td>Menue 1: </td><td>Lasagne Bolognese und als Nachtisch Vanilleeis</td></tr>
-				<tr><td>Menue 2: </td><td>Vegetarisches Sushi und als Nachtisch Bio Salat</td></tr>
-				<tr><td>Menue 3: </td><td>Herzhaftes Hänchensteak und als Nachtisch Joghurt</td></tr>
-				<tr><td>Menue 4: </td><td>Spinat mit Fischstäbchen und Spiegelei und als Joghurt</td></tr>
 				<tr><td colspan="2"><input type="submit" value="Zurück" /></td></tr>
 			</table>
 		</form>
@@ -138,7 +141,10 @@
 	} else 
 	{
 ?>
-	Bitte zuerst einloggen <a href="Login.php"> hier</a>.
+	<b>Bitte zuerst einloggen <a href="Login.php"> hier</a></b>.
 <?php
 	}
 ?>
+
+				</body>
+			</html>

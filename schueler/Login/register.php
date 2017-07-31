@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!Das hier ist dazu da eine extra php Datei zu laden die wir benötigen
-um zur Datenbank zu verbinden.>
 <html>
 	<head>
 		<title>Neu bei uns? - jetzt Rregistrieren</title>
